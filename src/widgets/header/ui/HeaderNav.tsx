@@ -1,52 +1,30 @@
 import { Link, useLocation } from 'react-router-dom';
-import {Button} from "@/shared/ui/button/Button";
+import { Button } from '@/shared/ui/button/Button';
+import { FC } from 'react';
 
-const HeaderNav = () => {
-    const location = useLocation(); // Получаем текущий путь из react-router
+const navItems = [
+    { path: '/', text: 'Создать' },
+    { path: '/rating', text: 'Рейтинг' },
+    { path: '/report', text: 'Отчеты' },
+] as const;
 
-    // Определяем активную страницу на основе пути
-    const getActivePage = () => {
-        const path = location.pathname;
-        if (path === "/") return 1;
-        if (path === "/rating") return 2;
-        if (path === "/report") return 3;
-        if (path === "/about") return 4;
-        if (path === "/profile") return 5;
-        return 0;
-    };
+export const HeaderNav: FC = () => {
+    const { pathname } = useLocation();
 
     return (
         <nav>
-            <ul className="flex">
-                <li>
-                    <Link to="/">
-                        <   Button text="Создать" active={getActivePage() === 1} />
-                    </Link>
-                </li>
-                <li>
-                    <Link to="/rating">
-                        <Button text="Рейтинг" active={getActivePage() === 2} />
-                    </Link>
-                </li>
-                <li>
-                    <Link to="/report">
-                        <Button text="Отчеты" active={getActivePage() === 3} />
-                    </Link>
-                </li>
-                {/* Раскомментируйте при необходимости */}
-                {/* <li>
-                    <Link to="/about">
-                        <Button text="О нас" active={getActivePage() === 4} />
-                    </Link>
-                </li>
-                <li>
-                    <Link to="/profile">
-                        <Button text="Профиль" active={getActivePage() === 5} />
-                    </Link>
-                </li> */}
+            <ul className="flex gap-2">
+                {navItems.map(({ path, text }) => (
+                    <li key={path}>
+                        <Link to={path}>
+                            <Button
+                                text={text}
+                                active={pathname === path}
+                            />
+                        </Link>
+                    </li>
+                ))}
             </ul>
         </nav>
     );
 };
-
-export default HeaderNav;

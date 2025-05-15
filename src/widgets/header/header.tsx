@@ -1,4 +1,4 @@
-import HeaderNav from "@/widgets/header/ui/HeaderNav";
+import {HeaderNav} from "@/widgets/header/ui/HeaderNav";
 import SocialLinks from "@/shared/socialLinks/SocialLinks";
 
 
