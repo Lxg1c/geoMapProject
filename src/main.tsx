@@ -1,24 +1,33 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import App from "@/App";
-import Header from "@/widgets/header/header";
-import {
-    createBrowserRouter,
-    RouterProvider
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider} from "react-router-dom"
+import { CreatePage, RatingPage, ReportsPage } from "@/pages"
+import Layout from "@/layout/Layout";
+
 
 const router = createBrowserRouter([
     {
-        path: "/",
-        element: <App />
+        element: <Layout />, // Применяем Layout ко всем дочерним роутам
+        children: [
+            {
+                path: "/",
+                element: <CreatePage />
+            },
+            {
+                path: "/rating",
+                element: <RatingPage />
+            },
+            {
+                path: "/report",
+                element: <ReportsPage />
+            }
+        ]
     }
 ])
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
-        <RouterProvider router={router}>
-            <Header />
-        </RouterProvider>
+        <RouterProvider router={router} />
     </StrictMode>
 )
