@@ -12,9 +12,14 @@
   "dependencies": {
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@pbe/react-yandex-maps": "^1.2.5",
+    "@types/yandex-maps": "^2.1.36",
+    "@yandex/ymaps3-default-ui-theme": "^0.0.19",
     "path": "^0.12.7",
-    "react": "^19.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-router-dom": "^7.6.0",
+    "styled-components": "^6.1.18",
     "zustand": "^5.0.4"
   },
   "devDependencies": {
