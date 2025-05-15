@@ -1,0 +1,1 @@
+import {CoordinateType, IAdress, IMap} from "@/features/map/model/types";

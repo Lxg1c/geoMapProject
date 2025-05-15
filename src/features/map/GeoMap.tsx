@@ -1,42 +1,41 @@
 import {
-    Circle, Clusterer,
+    Circle,
+    Clusterer,
     FullscreenControl,
     GeolocationControl,
-    Map, ObjectManager,
+    Map,
+    ObjectManager,
     Placemark,
     useYMaps,
     ZoomControl
 } from "@pbe/react-yandex-maps";
 import styled from "styled-components";
 import { useState } from "react";
-import { IGeocodeResult } from "yandex-maps";
-import {IAdress} from "@/features/map/model/types";
-
-
-type CoordinateType = number[];
+import {IGeocodeResult} from "yandex-maps";
+import { IAdress, CoordinateType, GeoMapProps } from "@/features/map/model/types";
 
 const MapStyled = styled(Map)`
-  width: 750px;
-  height: 650px;
+    width: 750px;
+    height: 600px;
 `;
 
 
-export default function GeoMap(userLocation: CoordinateType | null) {
+
+export default function GeoMap({ userLocation }: GeoMapProps) {
     const [coordinates, setCoordinates] = useState<CoordinateType | null>(null);
     const [address, setAddress] = useState<IAdress | null>(null);
-    const [userRadius, setUserRadius] = useState<number>(100);
+    const [userRadius] = useState<number>(100);
+
     const clusterPoints: CoordinateType[] = [
         [47.244564, 39.710932],
         [47.23768, 39.6998],
         [47.23333, 39.70791],
         [45, 39]
-    ]
+    ];
 
     const ymaps = useYMaps(["geocode"]);
 
-
-
-    const handleClickMap = (e: IMap) => {
+    const handleClickMap = (e: any) => {
         const coords = e.get("coords") as CoordinateType;
 
         if (coords) {
@@ -76,12 +75,15 @@ export default function GeoMap(userLocation: CoordinateType | null) {
                 }}
             >
                 {clusterPoints.map((coordinates, index) => (
-                    <Placemark key={index} geometry={coordinates} />
+                    <Placemark
+                        key={index}
+                        geometry={coordinates}
+                    />
                 ))}
             </Clusterer>
             <FullscreenControl />
-            <GeolocationControl/>
-            <ZoomControl/>
+            <GeolocationControl />
+            <ZoomControl />
             {userLocation && (
                 <Circle
                     geometry={[userLocation, userRadius]}
@@ -95,10 +97,7 @@ export default function GeoMap(userLocation: CoordinateType | null) {
                     }}
                 />
             )}
-            <ObjectManager
-
-            />
-
+            <ObjectManager />
         </MapStyled>
     );
 }
