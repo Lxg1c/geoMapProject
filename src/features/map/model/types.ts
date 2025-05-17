@@ -11,4 +11,6 @@ export interface IMap {
 
 export interface GeoMapProps {
     scanRadius: number;
+    clusterPoints?: CoordinateType[];
+    usePlacemark?: boolean;
 }
