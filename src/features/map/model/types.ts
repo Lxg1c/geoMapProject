@@ -10,5 +10,5 @@ export interface IMap {
 }
 
 export interface GeoMapProps {
-    userLocation: CoordinateType | null;
+    scanRadius: number;
 }
