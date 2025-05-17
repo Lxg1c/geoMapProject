@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 interface SliderProps {
@@ -11,7 +11,7 @@ interface SliderProps {
 
 const SliderContainer = styled.div`
     width: 100%;
-    padding: 10px 0;
+    padding: 20px 0;
     position: relative;
 `;
 
@@ -26,7 +26,6 @@ const StyledSlider = styled.input.attrs({ type: 'range' })<{ value: number; min:
     position: relative;
     z-index: 1;
 
-    /* Общий трек */
     &::-webkit-slider-runnable-track {
         width: 100%;
         height: 10px;
@@ -34,7 +33,7 @@ const StyledSlider = styled.input.attrs({ type: 'range' })<{ value: number; min:
         background: linear-gradient(
         to right,
         #5186ED 0%,
-        #ffffff ${props => ((props.value - props.min) / (props.max - props.min)) * 100}%,
+        #5186ED ${props => ((props.value - props.min) / (props.max - props.min)) * 100}%,
         white ${props => ((props.value - props.min) / (props.max - props.min)) * 100}%,
         white 100%
         );
@@ -43,12 +42,12 @@ const StyledSlider = styled.input.attrs({ type: 'range' })<{ value: number; min:
                 inset 0 1px 3px rgba(0, 0, 0, 0.3),
                 0 1px 2px rgba(0, 0, 0, 0.1);
     }
-
-    /* Ползунок */
+    
+    //Ползунок
     &::-webkit-slider-thumb {
         -webkit-appearance: none;
-        width: 20px;
-        height: 20px;
+        width: 24px;
+        height: 24px;
         background: white;
         border-radius: 50%;
         border: 2px solid #5186ED;
@@ -59,49 +58,36 @@ const StyledSlider = styled.input.attrs({ type: 'range' })<{ value: number; min:
         transform: translateY(-50%);
         transition: all 0.2s ease;
         position: relative;
-        z-index: 2;
+        z-index: 3;
         top: 5px;
     }
+`;
 
-    &:hover::-webkit-slider-thumb {
-        transform: translateY(-50%) scale(1.1);
-        box-shadow:
-                0 3px 8px rgba(0, 0, 0, 0.3),
-                0 0 0 3px rgba(81, 134, 237, 0.4);
-    }
+const Tooltip = styled.div<{ $position: number; $visible: boolean }>`
+    position: absolute;
+    top: -10px;
+    left: ${props => props.$position}%;
+    transform: translateX(-50%);
+    background: #5186ED;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    opacity: ${props => props.$visible ? 1 : 0};
+    transition: opacity 0.2s;
+    z-index: 2;
+    pointer-events: none;
+    white-space: nowrap;
 
-    /* Для Firefox */
-    &::-moz-range-track {
-        width: 100%;
-        height: 10px;
-        background: linear-gradient(
-        to right,
-        #5186ED 0%,
-        #5186ED ${props => ((props.value - props.min) / (props.max - props.min)) * 100}%,
-        white ${props => ((props.value - props.min) / (props.max - props.min)) * 100}%,
-        white 100%
-        );
-        border-radius: 15px;
-    }
-
-    &::-moz-range-thumb {
-        width: 20px;
-        height: 20px;
-        background: white;
-        border-radius: 50%;
-        border: 2px solid #5186ED;
-        cursor: pointer;
-        box-shadow:
-                0 2px 5px rgba(0, 0, 0, 0.2),
-                0 0 0 2px rgba(81, 134, 237, 0.3);
-        transition: all 0.2s ease;
-    }
-
-    &:hover::-moz-range-thumb {
-        transform: scale(1.1);
-        box-shadow:
-                0 3px 8px rgba(0, 0, 0, 0.3),
-                0 0 0 3px rgba(81, 134, 237, 0.4);
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-width: 5px 5px 0;
+        border-style: solid;
+        border-color: #5186ED transparent transparent;
     }
 `;
 
@@ -123,15 +109,36 @@ export const Slider: React.FC<SliderProps> = ({
                                                   onChange,
                                                   step = 1
                                               }) => {
+    const [isHovered, setIsHovered] = useState(false);
+    const [thumbPosition, setThumbPosition] = useState(
+        ((value - min) / (max - min)) * 100
+    );
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newValue = Number(e.target.value);
+        onChange(newValue);
+        setThumbPosition(((newValue - min) / (max - min)) * 100);
+    };
+
     return (
         <SliderContainer>
+            <Tooltip
+                $position={thumbPosition}
+                $visible={isHovered}
+            >
+                {value}
+            </Tooltip>
+
             <StyledSlider
                 min={min}
                 max={max}
                 value={value}
-                onChange={(e) => onChange(Number(e.target.value))}
+                onChange={handleChange}
                 step={step}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
             />
+
             <ValueLabels>
                 <Label>{min}</Label>
                 <Label>{max}</Label>
