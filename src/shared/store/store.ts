@@ -7,6 +7,8 @@ interface UserParam {
 
 type ClusterPoint = [number, number];
 
+type TableItem = {name: string, rating: number, offices: number, airQuality: number, safety: number};
+
 interface UserState {
     username: string;
     phone: string;
@@ -18,6 +20,7 @@ interface UserState {
     preferences: string[];
     userClusterPoints: ClusterPoint[];
     othersClusterPoints: ClusterPoint[];
+    tableInfo: TableItem[];
     isAuth: boolean;
     setUsername: (newName: string) => void;
     setPhone: (newPhone: string) => void;
@@ -60,6 +63,13 @@ const useUserStore = create<UserState>((set) => ({
     othersClusterPoints: [
         [40, 40],
         [50.23768, 45.6998],
+    ],
+    tableInfo: [
+        { name: "Центр города", rating: 96, offices: 48, airQuality: 60, safety: 82 },
+        { name: "Кировский", rating: 96, offices: 48, airQuality: 60, safety: 82 },
+        { name: "Северный", rating: 96, offices: 48, airQuality: 60, safety: 82 },
+        { name: "Советский", rating: 96, offices: 48, airQuality: 60, safety: 82 },
+        { name: "Ворошиловский", rating: 96, offices: 48, airQuality: 60, safety: 82 },
     ],
     isAuth: false,
 
