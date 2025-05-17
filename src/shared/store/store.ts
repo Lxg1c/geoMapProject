@@ -5,6 +5,8 @@ interface UserParam {
     value: number;
 }
 
+type ClusterPoint = [number, number];
+
 interface UserState {
     username: string;
     phone: string;
@@ -13,6 +15,9 @@ interface UserState {
     rating: number;
     params: UserParam[];
     flaws: string[];
+    preferences: string[];
+    userClusterPoints: ClusterPoint[];
+    othersClusterPoints: ClusterPoint[];
     isAuth: boolean;
     setUsername: (newName: string) => void;
     setPhone: (newPhone: string) => void;
@@ -37,6 +42,24 @@ const useUserStore = create<UserState>((set) => ({
     flaws: [
         "дефицит парковок",
         "шум от проезжей части"
+    ],
+    preferences: [
+        "Больница",
+        "Школы",
+        "Кафе/рестораны",
+        "Ночная жизнь",
+        "Езда на велосипеде",
+        "Море"
+    ],
+    userClusterPoints: [
+        [47.244564, 39.710932],
+        [47.23768, 39.6998],
+        [47.23333, 39.70791],
+        [45, 39]
+    ],
+    othersClusterPoints: [
+        [40, 40],
+        [50.23768, 45.6998],
     ],
     isAuth: false,
 
