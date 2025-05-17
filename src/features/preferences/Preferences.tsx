@@ -38,7 +38,7 @@ export const Preferences = ({ preferenceList, scanRadius, setScanRadius }: Prefe
             />
 
             <div className='button__container text-center'>
-                <Button variant='secondary' text='Скачать отчет'/>
+                <Button variant='secondary' text='Создать отчет'/>
             </div>
         </div>
     );
