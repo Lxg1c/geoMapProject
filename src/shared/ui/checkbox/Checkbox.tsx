@@ -12,8 +12,9 @@ const CheckboxContainer = styled.label`
     display: flex;
     align-items: center;
     cursor: pointer;
-    gap: 8px;
+    gap: 8px;  /* Уменьшено с 16px */
     user-select: none;
+    font-size: 0.875rem;  /* Уменьшенный размер текста */
 `;
 
 const HiddenCheckbox = styled.input.attrs({ type: "checkbox" })`
@@ -24,11 +25,11 @@ const HiddenCheckbox = styled.input.attrs({ type: "checkbox" })`
 `;
 
 const StyledCheckbox = styled.div<{ checked: boolean; disabled?: boolean }>`
-    width: 20px;
-    height: 20px;
+    width: 20px;  /* Уменьшено с 40px */
+    height: 20px;  /* Уменьшено с 40px */
     background: ${({ checked }) => (checked ? "#5186ED" : "#fff")};
-    border: 2px solid ${({ checked }) => (checked ? "#5186ED" : "#ccc")};
-    border-radius: 6px; /* Скругление углов */
+    border: 2px solid ${({ checked }) => (checked ? "#5186ED" : "#ccc")};  /* Уменьшено с 4px */
+    border-radius: 6px;  /* Уменьшено с 12px */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -46,12 +47,12 @@ const StyledCheckbox = styled.div<{ checked: boolean; disabled?: boolean }>`
         content: "";
         position: absolute;
         display: ${({ checked }) => (checked ? "block" : "none")};
-        width: 6px;
-        height: 12px;
+        width: 6px;  /* Уменьшено с 12px */
+        height: 12px;  /* Уменьшено с 24px */
         border: solid white;
-        border-width: 0 2px 2px 0;
+        border-width: 0 2px 2px 0;  /* Уменьшено с 4px */
         transform: rotate(45deg);
-        margin-top: -2px;
+        margin-top: -2px;  /* Уменьшено с -4px */
     }
 `;
 
