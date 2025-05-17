@@ -1,9 +1,6 @@
 import StarImage from "@/assets/star.svg";
+import {RatingProps} from "@/features/PositionInfo/model/types";
 
-
-type RatingProps = {
-    rating: number;
-};
 
 
 const Rating = ({ rating }: RatingProps) => {
