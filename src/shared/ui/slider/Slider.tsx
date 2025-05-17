@@ -11,7 +11,7 @@ interface SliderProps {
 
 const SliderContainer = styled.div`
     width: 100%;
-    padding: 20px 0;
+    padding: 10px 0;
     position: relative;
 `;
 
@@ -42,8 +42,7 @@ const StyledSlider = styled.input.attrs({ type: 'range' })<{ value: number; min:
                 inset 0 1px 3px rgba(0, 0, 0, 0.3),
                 0 1px 2px rgba(0, 0, 0, 0.1);
     }
-    
-    //Ползунок
+
     &::-webkit-slider-thumb {
         -webkit-appearance: none;
         width: 24px;
@@ -66,14 +65,14 @@ const StyledSlider = styled.input.attrs({ type: 'range' })<{ value: number; min:
 const Tooltip = styled.div<{ $position: number; $visible: boolean }>`
     position: absolute;
     top: -10px;
-    left: ${props => props.$position}%;
+    left: ${props => `${props.$position}%`};
     transform: translateX(-50%);
     background: #5186ED;
     color: white;
     padding: 4px 8px;
     border-radius: 4px;
     font-size: 12px;
-    opacity: ${props => props.$visible ? 1 : 0};
+    opacity: ${props => (props.$visible ? 1 : 0)};
     transition: opacity 0.2s;
     z-index: 2;
     pointer-events: none;
@@ -107,23 +106,25 @@ export const Slider: React.FC<SliderProps> = ({
                                                   max,
                                                   value,
                                                   onChange,
-                                                  step = 1
+                                                  step = 1,
                                               }) => {
     const [isHovered, setIsHovered] = useState(false);
-    const [thumbPosition, setThumbPosition] = useState(
-        ((value - min) / (max - min)) * 100
-    );
+
+    const getThumbPosition = (val: number): number => {
+        const percent = ((val - min) / (max - min)) * 100;
+        if (percent < 5) return 5;
+        if (percent > 95) return 95;
+        return percent;
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const newValue = Number(e.target.value);
-        onChange(newValue);
-        setThumbPosition(((newValue - min) / (max - min)) * 100);
+        onChange(Number(e.target.value));
     };
 
     return (
         <SliderContainer>
             <Tooltip
-                $position={thumbPosition}
+                $position={getThumbPosition(value)}
                 $visible={isHovered}
             >
                 {value}
