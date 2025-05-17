@@ -10,37 +10,46 @@ import {
     ZoomControl
 } from "@pbe/react-yandex-maps";
 import styled from "styled-components";
-import { useState } from "react";
-import {IGeocodeResult} from "yandex-maps";
-import { IAdress, CoordinateType, GeoMapProps } from "@/features/map/model/types";
+import { useEffect, useState } from "react";
+import { IGeocodeResult } from "yandex-maps";
+import { IAdress, CoordinateType, GeoMapProps, IMap } from "@/features/map/model/types";
+import { getUserPosition } from "@/shared/lib/geo-position";
 
 const MapStyled = styled(Map)`
     width: 750px;
     height: 600px;
+    border-radius: 20px;
+    overflow: hidden;
 `;
 
-
-
-export default function GeoMap({ userLocation }: GeoMapProps) {
+export default function GeoMap({ scanRadius = 500, clusterPoints, usePlacemark = true }: GeoMapProps) {
+    const [userLocation, setUserLocation] = useState<CoordinateType | null>(null);
     const [coordinates, setCoordinates] = useState<CoordinateType | null>(null);
     const [address, setAddress] = useState<IAdress | null>(null);
-    const [userRadius] = useState<number>(100);
-
-    const clusterPoints: CoordinateType[] = [
-        [47.244564, 39.710932],
-        [47.23768, 39.6998],
-        [47.23333, 39.70791],
-        [45, 39]
-    ];
 
     const ymaps = useYMaps(["geocode"]);
 
-    const handleClickMap = (e: any) => {
-        const coords = e.get("coords") as CoordinateType;
+    useEffect(() => {
+        const fetchUserPosition = async () => {
+            try {
+                const [lat, lng] = await getUserPosition();
+                return [lat, lng];
+            } catch (error) {
+                console.error(error);
+                return null;
+            }
+        };
 
-        if (coords) {
-            setCoordinates(coords);
-        }
+        fetchUserPosition().then((r) => {
+            if (Array.isArray(r) && r.length === 2) {
+                setUserLocation(r as CoordinateType);
+            }
+        });
+    }, []);
+
+    const handleClickMap = (e: IMap) => {
+        const coords = e.get("coords") as CoordinateType;
+        if (coords) setCoordinates(coords);
 
         ymaps?.geocode(coords)
             .then((result) => {
@@ -52,41 +61,64 @@ export default function GeoMap({ userLocation }: GeoMapProps) {
 
     function handleGeoLocation(result: IGeocodeResult): IAdress | undefined {
         const firstGeoObject = result.geoObjects.get(0);
-
         if (firstGeoObject) {
             const properties = firstGeoObject.properties;
-            const location = String(properties.get("description", {}));
+            const location = String(properties.get("description", {}))
             const route = String(properties.get("name", {}));
-
             return { location, route };
         }
     }
+
+    const placeMarkTemplate = (coords: CoordinateType): string => {
+        return `
+            <div style="padding: 10px; border-radius: 20px">
+                <h3 style="margin: 0 0 10px 0">Информация</h3>
+                <p>Координаты: ${coords.join(", ")}</p>
+                ${address ? `<p>Адрес: ${address.location}, ${address.route}</p>` : ""}
+            </div>
+        `;
+    };
 
     return (
         <MapStyled
             defaultState={{ center: [47.2313, 39.7233], zoom: 9 }}
             onClick={handleClickMap}
         >
-            {coordinates && <Placemark geometry={coordinates} />}
-            <Clusterer
-                options={{
-                    preset: "islands#invertedVioletClusterIcons",
-                    groupByCoordinates: false,
-                }}
-            >
-                {clusterPoints.map((coordinates, index) => (
-                    <Placemark
-                        key={index}
-                        geometry={coordinates}
-                    />
-                ))}
-            </Clusterer>
-            <FullscreenControl />
-            <GeolocationControl />
-            <ZoomControl />
-            {userLocation && (
+            {coordinates && usePlacemark && <Placemark geometry={coordinates} />}
+
+            {clusterPoints && (
+                <Clusterer
+                    options={{
+                        preset: "islands#invertedVioletClusterIcons",
+                        groupByCoordinates: false,
+                    }}
+                >
+                    {clusterPoints.map((coords, index) => (
+                        <Placemark
+                            key={index}
+                            geometry={coords}
+                            options={{
+                                preset: "islands#circleIcon",
+                                iconColor: "#735184",
+                                openHintOnHover: true,
+                                openBalloonOnClick: true,
+                                hideIconOnBalloonOpen: false
+                            }}
+                            properties={{
+                                hintContent: "Нажмите для подробностей",
+                                balloonContentHeader: `Место #${index + 1}`,
+                                balloonContentBody: placeMarkTemplate(coords),
+                                balloonContentFooter: "<small>Данные предоставлены сервисом</small>"
+                            }}
+                            modules={["geoObject.addon.balloon", "geoObject.addon.hint"]}
+                        />
+                    ))}
+                </Clusterer>
+            )}
+
+            {userLocation && usePlacemark && (
                 <Circle
-                    geometry={[userLocation, userRadius]}
+                    geometry={[coordinates || userLocation, scanRadius]}
                     options={{
                         draggable: false,
                         fillColor: "#7A8BDD",
@@ -97,6 +129,10 @@ export default function GeoMap({ userLocation }: GeoMapProps) {
                     }}
                 />
             )}
+
+            <FullscreenControl />
+            <GeolocationControl />
+            <ZoomControl />
             <ObjectManager />
         </MapStyled>
     );
