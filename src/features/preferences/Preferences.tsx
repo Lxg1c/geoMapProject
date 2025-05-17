@@ -1,12 +1,19 @@
-import {useState} from "react";
-import {PreferencesProps} from "@/features/userInfo/models/types";
-import {Slider} from "@/shared/ui/slider/Slider";
-import {Button} from "@/shared/ui/button/Button";
+import { useState } from "react";
+import { PreferencesProps } from "@/features/userInfo/models/types";
+import { Slider } from "@/shared/ui/slider/Slider";
+import { Button } from "@/shared/ui/button/Button";
+import { Checkbox } from "@/shared/ui/checkbox/Checkbox"; // Импортируем ваш компонент
 
 export const Preferences = ({ preferenceList, scanRadius, setScanRadius }: PreferencesProps) => {
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
     if (!preferenceList?.length) return null;
+
+    const handleCheckboxChange = (item: string) => {
+        setSelectedItems(prev =>
+            prev.includes(item) ? prev.filter(i => i !== item) : [...prev, item]
+        );
+    };
 
     return (
         <div className="preference__info gap-2">
@@ -15,12 +22,9 @@ export const Preferences = ({ preferenceList, scanRadius, setScanRadius }: Prefe
                 {preferenceList.map((item) => (
                     <li key={item} className="flex items-center justify-between">
                         <h4 className="title-4">{item}</h4>
-                        <input
-                            type="checkbox"
+                        <Checkbox
                             checked={selectedItems.includes(item)}
-                            onChange={() => setSelectedItems(prev =>
-                                prev.includes(item) ? prev.filter(i => i !== item) : [...prev, item]
-                            )}
+                            onChange={() => handleCheckboxChange(item)}
                         />
                     </li>
                 ))}
