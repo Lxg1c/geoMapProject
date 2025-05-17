@@ -1,17 +1,17 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faTelegram, faWhatsapp} from "@fortawesome/free-brands-svg-icons";
+import {faTelegram} from "@fortawesome/free-brands-svg-icons";
 
 const SocialLinks = () => {
     return (
         <ul className='flex justify-center gap-4 items-center h-10'>
-            <li className='w-10'>
-                <FontAwesomeIcon
-                    className="cursor-pointer hover:scale-125 transition-transform"
-                    icon={faWhatsapp}
-                    size="2xl"
-                    style={{ color: "#63E6BE" }}
-                />
-            </li>
+            {/*<li className='w-10'>*/}
+            {/*    <FontAwesomeIcon*/}
+            {/*        className="cursor-pointer hover:scale-125 transition-transform"*/}
+            {/*        icon={faWhatsapp}*/}
+            {/*        size="2xl"*/}
+            {/*        style={{ color: "#63E6BE" }}*/}
+            {/*    />*/}
+            {/*</li>*/}
             <li className='w-10'>
                 <FontAwesomeIcon
                     className="cursor-pointer hover:scale-125 transition-transform"
