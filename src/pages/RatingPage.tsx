@@ -1,5 +1,5 @@
 import useUserStore from "@/shared/store/store";
-import {InfoWrapper} from "@/shared/ui/InfoWrapper/InfoWrapper";
+import {InfoWrapper} from "@/shared/ui/infoWrapper/InfoWrapper";
 import {PositionInfo} from "@/features/PositionInfo/PositionInfo";
 import {UserInfo} from "@/features/userInfo/userInfo";
 import {Table} from "@/shared/ui/table/Table";

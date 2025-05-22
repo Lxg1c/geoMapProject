@@ -2,7 +2,7 @@ import useUserStore from "@/shared/store/store";
 import {YMaps} from "@pbe/react-yandex-maps";
 import GeoMap from "@/features/map/GeoMap";
 import {useState} from "react";
-import {InfoWrapper} from "@/shared/ui/InfoWrapper/InfoWrapper";
+import {InfoWrapper} from "@/shared/ui/infoWrapper/InfoWrapper";
 import {Preferences} from "@/features/preferences/Preferences";
 import {UserInfo} from "@/features/userInfo/userInfo";
 

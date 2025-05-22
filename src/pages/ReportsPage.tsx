@@ -1,5 +1,5 @@
 import useUserStore from "@/shared/store/store";
-import { InfoWrapper } from "@/shared/ui/InfoWrapper/InfoWrapper";
+import { InfoWrapper } from "@/shared/ui/infoWrapper/InfoWrapper";
 import { PositionInfo } from "@/features/PositionInfo/PositionInfo";
 import { YMaps } from "@pbe/react-yandex-maps";
 import GeoMap from "@/features/map/GeoMap";

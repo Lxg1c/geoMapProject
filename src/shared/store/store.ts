@@ -23,7 +23,7 @@ interface UserState {
     tableInfo: TableItem[];
     isAuth: boolean;
     setUsername: (newName: string) => void;
-    setPhone: (newPhone: string) => void;
+    setPhone: (newPhone: string | undefined) => void;
     login: () => void;
     logout: () => void;
 }
